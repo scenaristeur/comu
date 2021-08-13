@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0aeebb"],{"0bb5":function(n,t,e){"use strict";e.r(t);var o=function(){var n=this,t=n.$createElement,e=n._self._c||t;return e("b-button",{attrs:{variant:"success"},on:{click:n.login}},[n._v("Login")])},i=[],c={name:"LoginButton",methods:{login:function(){this.$store.commit("app/setAction","provider")}}},s=c,u=e("2877"),a=Object(u["a"])(s,o,i,!1,null,null,null);t["default"]=a.exports}}]);
+//# sourceMappingURL=chunk-2d0aeebb.3a6b5fcf.js.map
