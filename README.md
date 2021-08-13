@@ -1,5 +1,13 @@
 # comu
 
+lancement du serveur
+https://forum.chateaudesrobots.fr/t/solid-community-server/29
+```
+sudo npm install -g @solid/community-server  // install
+community-solid-server -c @css:config/file.json
+
+```
+
 ## Project setup
 ```
 npm install
