@@ -9,11 +9,11 @@ import {
   // getFile,
   // isRawData,
   // getContentType,
-  // saveFileInContainer,
+  saveFileInContainer,
   getContainedResourceUrlAll,
   getStringNoLocaleAll,
-  // //createContainerAt,
-  // getSourceUrl,
+  createContainerAt,
+  getSourceUrl,
   // deleteFile,
   // removeThing,
   // removeAll,
@@ -292,7 +292,33 @@ const plugin = {
         console.log("erreur",e, pod)
       }
       return await pod
+    },
+    Vue.prototype.$createFile = async function(params){
+    try{
+      let type = params.type && params.type.mime || "text/turtle"
+      let slug = encodeURIComponent(params.filename)
+      const savedFile = await saveFileInContainer(
+        params.dest,
+        new Blob([params.content || ""], { type: type }),
+        { slug: slug, fetch: sc.fetch }
+      );
+      console.log(`File saved at ${getSourceUrl(savedFile)}`);
+      this.$explore({url: params.dest})
+    } catch(e){
+      alert(e)
     }
+  },
+
+  Vue.prototype.$createFolder = async function(params){
+    try{
+      let url = params.dest+encodeURIComponent(params.foldername)
+      const savedFolder = await createContainerAt(url, {fetch: sc.fetch});
+      console.log(`Folder saved at ${getSourceUrl(savedFolder)}`);
+      this.$explore({url: params.dest})
+    } catch(e){
+      alert(e)
+    }
+  }
 
 
   }

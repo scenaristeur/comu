@@ -4,8 +4,10 @@
     {{pod}}
 
     <div v-if="pod.storage !=null">
-      Root : <b-button @click="explore(pod.storage)">{{pod.storage}}</b-button> <hr>
-      Container : {{ container}}
+      <!-- Pod root : <b-button @click="explore(pod.storage)">{{pod.storage}}</b-button> <hr>
+
+      Container : {{ container}} -->
+      <StorageToolbar />
       <Resources v-if="container != null" :resources="container.resources" />
     </div>
     <div v-else>
@@ -37,6 +39,7 @@
     name: "Storage",
     components: {
       'Resources': () => import('@/components/pod/Resources.vue'),
+      'StorageToolbar': () => import('@/components/pod/StorageToolbar.vue'),
     },
     data(){
       return {
@@ -67,7 +70,16 @@
         }else{
           this.container = null
         }
-      }
+      },
+      // container(c){
+      //   if (c.url != this.pod.storage){
+      //     let withoutSlash = c.url.slice(0, -1);
+      //     this.parent = withoutSlash.slice(0, withoutSlash.lastIndexOf('/'))+'/';
+      //   }else{
+      //     this.parent = null
+      //   }
+      //
+      // }
     },
     computed: {
       action: {

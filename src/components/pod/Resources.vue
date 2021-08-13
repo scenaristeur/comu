@@ -1,12 +1,20 @@
 <template>
+  <!-- <div style="height: 400px;overflow-y: scroll;">
   <b-list-group>
-    <b-list-group-item
-    v-for="r in resources" :key="r"
-    @click="explore(r)"
-    button>
-    <Resource :resource_url="r" />
-  </b-list-group-item>
+  <b-list-group-item
+  v-for="r in resources" :key="r"
+  @click="explore(r)"
+  button>
+  <Resource :resource_url="r" />
+</b-list-group-item>
 </b-list-group>
+</div> -->
+<div style="height: 400px;overflow-y: scroll;">
+  <b-list-group >
+    <Resource v-for="r in resources" :key="r"  :resource="r" />
+  </b-list-group>
+</div>
+
 </template>
 
 <script>
