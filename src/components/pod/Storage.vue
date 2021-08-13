@@ -4,7 +4,8 @@
     {{pod}}
 
     <div v-if="pod.storage !=null">
-      Storage :   {{pod.storage}}
+      Storage :   {{pod.storage}} <hr>
+      Container : {{ container}}
     </div>
     <div v-else>
 
@@ -30,7 +31,7 @@
 
   <script>
   import { WS } from "@inrupt/vocab-solid-common";
-  
+
   export default {
     name: "Storage",
     data(){
@@ -46,12 +47,26 @@
     },
     watch: {
       pod(pod){
-        pod != null ? this.storageCandidate = pod.webId.split('profile')[0] : ""
+        if(pod != null){
+          if(pod.storage == null){
+            this.storageCandidate = pod.webId.split('profile')[0]
+          }else
+          {
+            let path = {url:pod.storage}
+            this.$explore(path)
+          }
+        }else{
+          this.container = null
+        }
       }
     },
     computed: {
       action: {
         get () { return this.$store.state.app.action},
+        set (/*value*/) { /*this.updateTodo(value)*/ }
+      },
+      container: {
+        get () { return this.$store.state.app.container},
         set (/*value*/) { /*this.updateTodo(value)*/ }
       },
       // session: {

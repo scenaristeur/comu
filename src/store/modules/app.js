@@ -1,6 +1,7 @@
 //import Vue from 'vue';
 const state = () => ({
-      action: null
+  action: null,
+  container: null
   // url : "",
   // // messages: [],
   // gameContainer: null,
@@ -20,6 +21,9 @@ const actions = {
 const mutations = {
   setAction(state, a){
     state.action = a
+  },
+  setContainer(state, c){
+    state.container = c
   },
   // setUrl(state, url){
   //   console.log("url", url)
