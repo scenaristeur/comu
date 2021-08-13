@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <Storage />
     <LoginButton />
     <LoginModal />
@@ -15,7 +15,7 @@
 export default {
   name: 'Home',
   components: {
-    'HelloWorld': () => import('@/components/HelloWorld.vue'),
+    // 'HelloWorld': () => import('@/components/HelloWorld.vue'),
     'LoginButton': () => import('@/components/session/LoginButton.vue'),
     'LoginModal': () => import('@/components/session/LoginModal.vue'),
     'Storage': () => import('@/components/pod/Storage.vue'),

@@ -4,8 +4,9 @@
     {{pod}}
 
     <div v-if="pod.storage !=null">
-      Storage :   {{pod.storage}} <hr>
+      Root : <b-button @click="explore(pod.storage)">{{pod.storage}}</b-button> <hr>
       Container : {{ container}}
+      <Resources v-if="container != null" :resources="container.resources" />
     </div>
     <div v-else>
 
@@ -34,12 +35,20 @@
 
   export default {
     name: "Storage",
+    components: {
+      'Resources': () => import('@/components/pod/Resources.vue'),
+    },
     data(){
       return {
         storageCandidate: ""
       }
     },
     methods:{
+      explore(r){
+        let path = {url: r}
+        console.log(path)
+        this.$explore(path)
+      },
       configureStorage(){
         console.log(this.storageCandidate)
         this.$setUrl(this.pod.webId, WS.storage, this.storageCandidate, )
