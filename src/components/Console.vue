@@ -1,8 +1,9 @@
 <template>
   <div>
-    action: {{ action }}<br>
-    session: {{session}}<br>
-    session: {{pod}}<br>
+    pod: {{pod}}<hr>
+    action: {{ action }}<hr>
+    session: {{session}}<hr>
+
   </div>
 </template>
 

@@ -20,8 +20,8 @@ import {
   // removeStringNoLocale,
   // deleteContainer,
   // addStringNoLocale,
-  // setThing,
-  // saveSolidDatasetAt,
+  setThing,
+  saveSolidDatasetAt,
   // createSolidDataset,
   // createThing,
   //addUrl,
@@ -33,7 +33,7 @@ import {
   getUrl,
   // //  addDatetime,
 
-  //setUrl,
+  setUrl,
   //setStringNoLocale,
   //setDecimal,
   //setInteger,
@@ -50,6 +50,38 @@ const plugin = {
     let store = opts.store
     //  let sockets = []
     //    console.log(store)
+
+
+    Vue.prototype.$setUrl= async function(thing_url, pred, object){
+      console.log(thing_url, pred, object)
+
+      try{
+        const dataset = await getSolidDataset( thing_url, { fetch: sc.fetch });
+        console.log("DATASET", dataset)
+        let thing = await getThing( dataset, thing_url );
+        thing = setUrl(thing, pred, object);
+        let thingInDs = setThing(dataset, thing);
+        let savedThing  = await saveSolidDatasetAt(thing_url, thingInDs, { fetch: sc.fetch } );
+        console.log("Saved thing", savedThing)
+
+        let session = sc.getDefaultSession()
+        this.$getPodInfosFromSession(session)
+
+        return savedThing
+        // pod.name = await getStringNoLocale(profile, FOAF.name);
+        // pod.friends = await getUrlAll(profile, FOAF.knows).map(webId => {return {webId: webId}})
+        // pod.storage = await getUrl(profile, WS.storage);
+        // pod.photo = await getUrl(profile, VCARD.hasPhoto);
+        // pod.publicTags = await this.$getTags(pod.storage+'public/tags.ttl')
+        // store.commit("vatch/addToNetwork", pod.publicTags)
+        //this.$subscribe(pod.storage)
+        //  console.log("getpodinfos",pod)
+      }catch(e)
+      {
+        console.log("erreur",e, thing_url)
+      }
+    },
+
 
     Vue.prototype.$login= async function(issuer) {
 
@@ -70,7 +102,7 @@ const plugin = {
         console.log(params)
         await session.logout()
         store.commit('session/setSession',session)
-          store.commit('session/setPod', {})
+        store.commit('session/setPod', null)
         //  store.commit('booklice/setPath', "")
       } catch(e){
         alert("$logout "+e)
@@ -98,7 +130,7 @@ const plugin = {
         //  router.push({path: '?'+query})
         store.commit('session/setSession',session)
         //  dispatch('getPodInfos', session)
-         this.$getPodInfosFromSession(session)
+        this.$getPodInfosFromSession(session)
       });
 
 
@@ -109,56 +141,56 @@ const plugin = {
         })
         store.commit('session/setSession',session)
         //  dispatch('getPodInfos', session)
-         this.$getPodInfosFromSession(session)
+        this.$getPodInfosFromSession(session)
 
       } catch(e){
         alert("$checkSessions " +e)
       }
     },
     Vue.prototype.$getPodInfosFromSession = async function(session){
-  try{
-    let pod = {}
-    pod.logged = session.info.isLoggedIn
-    if (pod.logged) {
-      pod.webId = session.info.webId
-      pod = await this.$getPodInfos(pod)
-      store.commit('session/setPod', pod)
-      if (pod.storage != null){
-        //  this.$setCurrentThingUrl(pod.storage)
-        //  store.commit('booklice/setPath', pod.storage+'public/bookmarks/')
-        //let publicTagFile = pod.storage+'public/tags.ttl'
-        //let privateTagFile = podStorage+'private/tags.ttl'
-        // let tags = await this.$getTags(publicTagFile)
-        // console.log("############################tags",tags)
+      try{
+        let pod = {}
+        pod.logged = session.info.isLoggedIn
+        if (pod.logged) {
+          pod.webId = session.info.webId
+          pod = await this.$getPodInfos(pod)
+          store.commit('session/setPod', pod)
+          if (pod.storage != null){
+            //  this.$setCurrentThingUrl(pod.storage)
+            //  store.commit('booklice/setPath', pod.storage+'public/bookmarks/')
+            //let publicTagFile = pod.storage+'public/tags.ttl'
+            //let privateTagFile = podStorage+'private/tags.ttl'
+            // let tags = await this.$getTags(publicTagFile)
+            // console.log("############################tags",tags)
+          }
+        }else{
+          store.commit('session/setPod', null)
+          //  store.commit('session/setThings', [])
+        }
+      } catch(e){
+        alert("$getPodInfosFromSession "+e)
       }
-    }else{
-      store.commit('session/setPod', null)
-      //  store.commit('session/setThings', [])
-    }
-  } catch(e){
-    alert("$getPodInfosFromSession "+e)
-  }
-},
+    },
 
-Vue.prototype.$getPodInfos = async function(pod){
-  try{
-    const dataset = await getSolidDataset( pod.webId, { fetch: sc.fetch });
-    console.log("DATASET", dataset)
-    let profile = await getThing( dataset, pod.webId );
-    pod.name = await getStringNoLocale(profile, FOAF.name);
-    pod.friends = await getUrlAll(profile, FOAF.knows).map(webId => {return {webId: webId}})
-    pod.storage = await getUrl(profile, WS.storage);
-    pod.photo = await getUrl(profile, VCARD.hasPhoto);
-    // pod.publicTags = await this.$getTags(pod.storage+'public/tags.ttl')
-    // store.commit("vatch/addToNetwork", pod.publicTags)
-    //this.$subscribe(pod.storage)
-    //  console.log("getpodinfos",pod)
-  }catch(e)
-  {
-    console.log("erreur",e, pod)
-  }
-  return await pod
-}
+    Vue.prototype.$getPodInfos = async function(pod){
+      try{
+        const dataset = await getSolidDataset( pod.webId, { fetch: sc.fetch });
+        console.log("DATASET", dataset)
+        let profile = await getThing( dataset, pod.webId );
+        pod.name = await getStringNoLocale(profile, FOAF.name);
+        pod.friends = await getUrlAll(profile, FOAF.knows).map(webId => {return {webId: webId}})
+        pod.storage = await getUrl(profile, WS.storage);
+        pod.photo = await getUrl(profile, VCARD.hasPhoto);
+        // pod.publicTags = await this.$getTags(pod.storage+'public/tags.ttl')
+        // store.commit("vatch/addToNetwork", pod.publicTags)
+        //this.$subscribe(pod.storage)
+        //  console.log("getpodinfos",pod)
+      }catch(e)
+      {
+        console.log("erreur",e, pod)
+      }
+      return await pod
+    }
 
 
   }

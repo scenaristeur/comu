@@ -50,22 +50,23 @@
 export default {
   name: "LoginModal",
   data() {
-  return {
-    issuers: [
-      { value: null, text: 'Login / Connexion', disabled: true},
-      { value: "https://broker.pod.inrupt.com", text: 'Broker Pod Inrupt (Entreprise Solid Server)' },
-      { value: "https://inrupt.net", text: 'Inrupt.net' },
-      { value: "https://dev.inrupt.net", text: 'dev.inrupt.net' },
-      { value: "https://solidcommunity.net", text: 'SolidCommunity.net' },
-      { value: "https://solidweb.org", text: 'Solidweb.org' },
-      { value: "other", text: 'Autre / Other' },
+    return {
+      issuers: [
+        { value: null, text: 'Login / Connexion', disabled: true},
+        { value: "https://broker.pod.inrupt.com", text: 'Broker Pod Inrupt (Entreprise Solid Server)' },
+        { value: "https://inrupt.net", text: 'Inrupt.net' },
+        { value: "https://dev.inrupt.net", text: 'dev.inrupt.net' },
+        { value: "https://solidcommunity.net", text: 'SolidCommunity.net' },
+        { value: "https://solidweb.org", text: 'Solidweb.org' },
+        { value: "http://localhost:3000", text: 'local Solid (Community) Server' },
+        { value: "other", text: 'Autre / Other' },
 
-    ],
-    issuer: null,
-    restore: true,
-    other: ""
-  }
-},
+      ],
+      issuer: null,
+      restore: true,
+      other: ""
+    }
+  },
   watch:{
     action(){
       this.action == "provider" ? this.$bvModal.show("login-modal") : ""
@@ -90,31 +91,33 @@ export default {
       return "l'url de ton fournisseur/provider, pas celle de ton webId"
     }
   },
-created(){
- this.$checkSessions({restore: this.restore})
-console.log("checksession")
-},
-methods:{
-  onInput(){
-    console.log("input", this.other)
+  created(){
+    this.$checkSessions({restore: this.restore})
+    console.log("checksession")
   },
-  onChange(){
-    console.log("change", this.other)
-    if (this.other != undefined && this.other.length != undefined)  {
-      this.issuer = this.other
-      this.login()
+  methods:{
+    onInput(){
+      console.log("input", this.other)
+    },
+    onChange(){
+      console.log("change", this.other)
+      if (this.other != undefined && this.other.length != undefined)  {
+        this.issuer = this.other
+        this.login()
+      }
+    },
+    login(){
+      if (this.issuer != null && this.issuer != "other"){
+        console.log(this.issuer)
+        this.$login(this.issuer)
+        this.$store.commit('app/setAction', null)
+
+      }
+    },
+    logout(){
+      this.$logout({restore: this.restore})
     }
   },
-  login(){
-    if (this.issuer != null && this.issuer != "other"){
-      console.log(this.issuer)
-      this.$login(this.issuer)
-    }
-  },
-  logout(){
-    this.$logout({restore: this.restore})
-  }
-},
 }
 </script>
 
